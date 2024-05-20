@@ -9,12 +9,13 @@ import cors from "cors";
 import authRoute from "./routes/auth";
 import passport from "passport";
 import setupRoutes from "./routes";
+import notFoundMiddleware from "./middleware/notFound";
 
 // require("./utils/passport");
 const app: Application = express();
 
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 app.use(
   session({
     secret: "dog",
@@ -28,6 +29,7 @@ app.use(passport.session());
 app.use(morgan("dev"));
 setupRoutes(app);
 
+app.use(notFoundMiddleware);
 
 const PORT = process.env.PORT || 3000;
 

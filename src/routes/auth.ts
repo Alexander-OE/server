@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 const router = Router();
 import passport from "passport";
-import { Register } from "../controllers/auth.controller";
+import { Register, Login } from "../controllers/auth.controller";
 
 function isLoggedIn(req: Request, res: Response, next: NextFunction) {
   req.user ? next() : res.status(401).send("Unauthorized");
@@ -49,5 +49,7 @@ router.get(
 );
 
 router.post("/register", Register);
+
+router.post("/login", Login)
 
 export default router;

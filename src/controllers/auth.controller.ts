@@ -18,27 +18,20 @@ export const Register = async (
     );
     res.status(200).json({ message: "success", data: result });
   } catch (error) {
-   next(error)
+    next(error);
   }
 };
 
-
-export const signUp = async (
+export const Login = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { firstName, lastName, email, confirmPassword, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const result = await authService.Register(
-      firstName,
-      lastName,
-      email,
-      confirmPassword,
-      password
-    );
+    const result = await authService.Login(email, password);
     res.status(200).json({ message: "success", data: result });
   } catch (error) {
-   next(error)
+    next(error);
   }
 };

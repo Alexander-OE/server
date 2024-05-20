@@ -1,5 +1,5 @@
 import { User } from "../db/models/user";
-import { hashedPassword, createJWT } from "../utils/helpers";
+import { hashedPassword, comparePassword, createJWT } from "../utils/helpers";
 class AuthService {
   async Register(
     firstName: string,
@@ -31,8 +31,31 @@ class AuthService {
     };
   }
 
+  async Login(email: string, password: string) {
+    const userExist = await User.findOne({ email })
+    if (!userExist) {
+      throw new Error("User does not exist");
+    }
 
-  async Login(){}
+    const userPassword = await comparePassword(password, userExist.password);
+
+    if (!userPassword) {
+      throw new Error("Password does not match");
+    }
+    let userDetail = {
+      id: userExist._id,
+      firstName: userExist.firstName,
+      lastName: userExist.lastName,
+      email: userExist.email,
+    };
+
+    const token = await createJWT(userDetail);
+
+    return {
+      userExist,
+      token,
+    };
+  }
 }
 
 export default new AuthService();
